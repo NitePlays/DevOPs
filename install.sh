@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install Jenkins
 sudo apt-get update
+sudo apt-get install wget unzip -y
 sudo apt-get install -y openjdk-11-jdk
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
@@ -60,12 +61,13 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 sudo usermod -aG docker $USER
 
 # Install AWS CLI
-sudo apt-get update
-sudo apt-get install -y awscli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+export PATH="/usr/local/bin:$PATH"
 
 # Install Terraform
 sudo apt-get update
-sudo apt-get install wget unzip -y
 LATEST_TERRAFORM_VERSION=$(curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | grep tag_name | cut -d '"' -f 4 | cut -c 2-)
 wget "https://releases.hashicorp.com/terraform/${LATEST_TERRAFORM_VERSION}/terraform_${LATEST_TERRAFORM_VERSION}_linux_amd64.zip"
 unzip "terraform_${LATEST_TERRAFORM_VERSION}_linux_amd64.zip"
