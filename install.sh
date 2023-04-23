@@ -24,8 +24,8 @@ sudo rm "sonarqube-${LATEST_VERSION}.zip"
 
 # Configure System
 sudo useradd -b /opt/sonarqube -s /bin/bash sonarqube
-sudo sh -c 'echo -e "vm.max_map_count=524288\nfs.file-max=131072" >> /etc/sysctl.conf'
-sudo sh -c 'echo -e "sonarqube - nofile 131072\nsonarqube - nproc 8192" >> /etc/security/limits.d/99-sonarqube.conf'
+sudo sh -c 'echo "vm.max_map_count=524288\nfs.file-max=131072" >> /etc/sysctl.conf'
+sudo sh -c 'echo "sonarqube - nofile 131072\nsonarqube - nproc 8192" >> /etc/security/limits.d/99-sonarqube.conf'
 
 # Configure SonarQube
 sudo sed -i 's|#sonar.jdbc.username=|sonar.jdbc.username=sonarqube|g' /opt/sonarqube/conf/sonar.properties
@@ -37,7 +37,7 @@ sudo sed -i 's|#sonar.web.port=9000|sonar.web.port=9000|g' /opt/sonarqube/conf/s
 sudo sed -i 's|#sonar.web.javaAdditionalOpts=|sonar.web.javaAdditionalOpts=-server|g' /opt/sonarqube/conf/sonar.properties
 sudo sed -i 's|#sonar.log.level=INFO|sonar.log.level=INFO|g' /opt/sonarqube/conf/sonar.properties
 sudo sed -i 's|#sonar.path.logs=logs|sonar.path.logs=logs|g' /opt/sonarqube/conf/sonar.properties
-sudo sh -c 'echo -e "[Unit]\nDescription=SonarQube service\nAfter=syslog.target network.target\n\n[Service]\nType=forking\nExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start\nExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop\nUser=sonarqube\nGroup=sonarqube\nRestart=always\nLimitNOFILE=65536\nLimitNPROC=a4096\n\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/sonarqube.service'
+sudo sh -c 'echo "[Unit]\nDescription=SonarQube service\nAfter=syslog.target network.target\n\n[Service]\nType=forking\nExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start\nExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop\nUser=sonarqube\nGroup=sonarqube\nRestart=always\nLimitNOFILE=65536\nLimitNPROC=a4096\n\n[Install]\nWantedBy=multi-user.target" > /etc/systemd/system/sonarqube.service'
 
 # Install PostgreSQL
 sudo apt-get install -y postgresql postgresql-contrib
